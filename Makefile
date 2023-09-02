@@ -51,3 +51,11 @@ clean:
 	$(MAKE) -C $(BASE)/src clean
 	rm -f libchecksieve.a checksieve*.so check-sieve
 	rm -Rf build
+
+.PHONY: lint
+lint:
+	$(CPPCHECK) \
+		-i gen \
+		-I src  -I src/AST -I src/AST/Validation -I src/Server \
+		--std=c++11 $(CPPCHECK_FLAGS) \
+		$(LIBCHECKSIEVE_SRC) $(AST_SRC)

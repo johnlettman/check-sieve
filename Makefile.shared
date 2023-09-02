@@ -25,3 +25,6 @@ CFLAGS += -DDEBUG
 endif
 
 endif
+
+CPPCHECK ?= cppcheck
+CPPCHECK_FLAGS ?= --enable=all
