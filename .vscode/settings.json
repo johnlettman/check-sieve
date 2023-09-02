@@ -39,6 +39,7 @@
   "clangd.onConfigChanged": "restart",
   "clangd.checkUpdates": true,
   "[cpp]": {
+    "editor.rulers": [100],
     "editor.defaultFormatter": "zachflower.uncrustify"
   },
 }

@@ -1,0 +1,60 @@
+# ClangFormat style options
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+Language: Cpp
+BasedOnStyle: WebKit
+
+# Align pointers to the left.
+# Pulled from WebKit project.
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#pointeralignment
+PointerAlignment: Left
+
+# Use the defined PointerAlignment rather than analyzing the existing code.
+# Pulled from WebKit project.
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#derivepointeralignment
+DerivePointerAlignment: false
+
+# Keep template declarations on the same line.
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#alwaysbreaktemplatedeclarations
+AlwaysBreakTemplateDeclarations: false
+
+# Permit single-line case formats for short cases.
+# VALUES
+# true:                                   false:
+# switch (a) {                    vs.     switch (a) {
+# case 1: x = 1; break;                   case 1:
+# case 2: return;                           x = 1;
+# }                                         break;
+#                                         case 2:
+#                                           return;
+#                                         }
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#allowshortcaselabelsonasingleline
+AllowShortCaseLabelsOnASingleLine: true
+
+# Don't insert space after `template`.
+# VALUES
+# true:                                  false:
+# template <int> void foo();     vs.     template<int> void foo();
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#spaceaftertemplatekeyword
+SpaceAfterTemplateKeyword: false
+
+# WebKit guidelines require each statement to have its own line; however,
+# there is room for interpretation regarding empty lines. To save space, it
+# makes sense to permit empty blocks on the same line.
+# See: https://webkit.org/code-style-guidelines/#linebreaking-multiple-statements
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#allowshortblocksonasingleline
+AllowShortBlocksOnASingleLine: Empty
+
+# 80 is the standard; however, it can be quite restrictive in the era of
+# widescreen monitors. 100 is a reasonable and common compromise.
+# Docs: https://clang.llvm.org/docs/ClangFormatStyleOptions.html#columnlimit
+ColumnLimit: 100
+
+# Condense list formats.
+# VALUES
+# true:                                  false:
+# vector<int> x{1, 2, 3, 4};     vs.     vector<int> x{ 1, 2, 3, 4 };
+# vector<T> x{{}, {}, {}, {}};           vector<T> x{ {}, {}, {}, {} };
+# f(MyMap[{composite, key}]);            f(MyMap[{ composite, key }]);
+# new int[3]{1, 2, 3};                   new int[3]{ 1, 2, 3 };
+# Docs:
+Cpp11BracedListStyle: false
