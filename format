@@ -1,21 +1,54 @@
 #!/usr/bin/env bash
-[ "$(uname -s)" = "Darwin" ] && export OSX=1 && export UNIX=1
-[ "$(uname -s)" = "Linux" ] && export LINUX=1 && export UNIX=1
-uname -s | grep -q "_NT-" && export WINDOWS=1
 
-if [ "${OSX}" ]; then
+# Determine the operating system
+os_name=$(uname -s)
+case "$os_name" in
+    Darwin)
+        declare -g OSX=1
+        declare -g UNIX=1
+        ;;
+    Linux)
+        declare -g LINUX=1
+        declare -g UNIX=1
+        ;;
+    *_NT-*)
+        declare -g WINDOWS=1
+        ;;
+    *)
+        echo "Unknown OS detected: $os_name"
+        ;;
+esac
+
+# Determine CPU count based on the OS
+if [[ -n "$OSX" ]]; then
     CPUCOUNT=$(sysctl -n hw.ncpu)
     export CPUCOUNT
-elif [ "${LINUX}" ]; then
+elif [[ -n "$LINUX" ]]; then
     CPUCOUNT=$(nproc)
     export CPUCOUNT
 else
-    export CPUCOUNT="1"
+    export CPUCOUNT=1
 fi
 
-function format {
-    find $1 \( -iname '*.h' -o -iname '*.c' -o -iname '*.cpp' \) -print0 |
-        xargs -n 1 -P "${CPUCOUNT}" -I{} -t uncrustify -c .uncrustify.cfg --no-backup {}
+# Arguments for find command
+declare -a find_args=(
+    -iname '*.h'
+    -o -iname '*.hh'
+    -o -iname '*.hpp'
+    -o -iname '*.c'
+    -o -iname '*.cc'
+    -o -iname '*.cpp'
+)
+
+format_source() {
+    if [[ ! -f "uncrustify.cfg" ]]; then
+        echo "Error: 'uncrustify.cfg' not found."
+        return 1
+    fi
+
+    # shellcheck disable=SC2038
+    find "$1" "${find_args[@]}" | \
+        xargs -P "$CPUCOUNT" -I{} uncrustify -c uncrustify.cfg --no-backup {}
 }
 
-format src
+format_source src
