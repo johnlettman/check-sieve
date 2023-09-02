@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+[ "$(uname -s)" = "Darwin" ] && export OSX=1 && export UNIX=1
+[ "$(uname -s)" = "Linux" ] && export LINUX=1 && export UNIX=1
+uname -s | grep -q "_NT-" && export WINDOWS=1
+
+if [ "${OSX}" ]; then
+    CPUCOUNT=$(sysctl -n hw.ncpu)
+    export CPUCOUNT
+elif [ "${LINUX}" ]; then
+    CPUCOUNT=$(nproc)
+    export CPUCOUNT
+else
+    export CPUCOUNT="1"
+fi
+
+function format {
+    find $1 \( -iname '*.h' -o -iname '*.c' -o -iname '*.cpp' \) -print0 |
+        xargs -n 1 -P "${CPUCOUNT}" -I{} -t uncrustify -c .uncrustify.cfg --no-backup {}
+}
+
+format src
