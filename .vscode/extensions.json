@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-vscode.cpptools",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "Gruntfuggly.todo-tree",
+    "EditorConfig.EditorConfig",
+    "zachflower.uncrustify"
+  ]
+}
